@@ -1,0 +1,36 @@
+{
+  "name": "recode",
+  "version": "1.0.0",
+  "description": "development product",
+  "main": "server.js",
+  "scripts": {
+    "test": "start",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhiram88/User-Management-System.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "user",
+    "management",
+    "system"
+  ],
+  "author": "Abhiram Challapalli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abhiram88/User-Management-System/issues"
+  },
+  "homepage": "https://github.com/Abhiram88/User-Management-System#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.1",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "mongoose": "^6.1.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
