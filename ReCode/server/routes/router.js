@@ -11,6 +11,7 @@ route.get('/signup', services.signupRoute)
 
 //API
 route.get('/api/users', controller.users)
-
+route.get('/api/users/:id', controller.findUser)
+route.delete('/api/users/:id', controller.deleteUser)
 
 module.exports = route;
