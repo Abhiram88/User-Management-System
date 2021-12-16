@@ -10,7 +10,9 @@ var schema = new mongoose.Schema({
         unique: true
     },
     gender: String,
-    status: String
+    status: String,
+    password: String,
+    token: String
 })
 
 const userDb = mongoose.model('userdb', schema)

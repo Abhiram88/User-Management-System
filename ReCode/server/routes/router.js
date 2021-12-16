@@ -5,8 +5,8 @@ const controller = require('../controller/controller')
 
 // GET
 route.get('/', services.homeRoute)
-route.get('/login', services.loginRoute)
-route.get('/signup', services.signupRoute)
+route.post('/login', services.loginRoute)
+route.post('/signup', services.signupRoute)
 
 
 //API

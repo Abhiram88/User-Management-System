@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 8080
 
 app.use(morgan('tiny'));
 app.use(bodyparser.urlencoded({extended: true}));
+app.use(express.json())
 const route = require('./server/routes/router');
 
 app.use('/', require('./server/routes/router'))
