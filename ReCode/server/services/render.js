@@ -11,26 +11,23 @@ exports.loginRoute = async (req, res)=>{
     const email = req.body.email;
     const password = req.body.password;
 
-    const user = userDb.findOne({email})
-    const saved_pass = userDb.findOne({email}, 'password')
+    const user = userDb.findOne({'email': email}) 
+    .then(async user_data => {
+        if(user_data && await bcrypt.compare(password, user_data.password)){
+            const token = jwt.sign(
+                { user_id: email },
+                process.env.TOKEN_KEY,
+                {
+                  expiresIn: "2h",
+                }
+              );
+        
+              // save user token
+              user.token = token;
     
-    console.log("hello")
-    console.log(saved_pass.password)
-
-    if(user && await bcrypt.compare(password, saved_pass)){
-        const token = jwt.sign(
-            { user_id: email },
-            process.env.TOKEN_KEY,
-            {
-              expiresIn: "2h",
-            }
-          );
-    
-          // save user token
-          user.token = token;
-
-          res.send(user)
-    }
+              res.send(user)
+        }
+    });   
 }
 
 
