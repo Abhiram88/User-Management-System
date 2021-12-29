@@ -1,0 +1,28 @@
+{
+  "name": "jwt_tokens",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhiram88/User-Management-System.git"
+  },
+  "keywords": [
+    "jwt",
+    "jwt",
+    "auth"
+  ],
+  "author": "Abhiram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abhiram88/User-Management-System/issues"
+  },
+  "homepage": "https://github.com/Abhiram88/User-Management-System#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
