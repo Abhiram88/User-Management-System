@@ -1,0 +1,38 @@
+{
+  "name": "social_networking",
+  "version": "1.0.0",
+  "description": "Social Networking app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Abhiram88/User-Management-System/issues"
+  },
+  "keywords": [
+    "social",
+    "networking",
+    "mongodb",
+    "practice",
+    "CRUD",
+    "operations",
+    "jwt",
+    "tokens"
+  ],
+  "author": "Abhiram Challapalli",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.1",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.4",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
