@@ -22,6 +22,9 @@ const userModel = mongoose.Schema({
     },
     password:{
         type: String
+    },
+    resetToken:{
+        type: String
     }
 });
 

@@ -19,6 +19,56 @@ const users = [
     },
 ];
 
+let refreshTokens = [];
+
+app.post('/api/refeshToken', (req, res)=>{
+    // take token from the user.
+    const refreshToken = req.body.token;
+
+    // sent err if token is not valid
+    if(!refreshToken){
+        res.json("No token found");
+    }else{
+        // create & send new refresh token
+        jwt.verify(refreshToken, 'myRefreshSecretKey', (err, user)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+
+                const newAccessToken = generateAccessToken(user);
+                const newRefreshToken = generateRefreshToken(user);
+                refreshTokens.push(newRefreshToken);
+                
+                res.json({
+                    accessToken: newAccessToken,
+                    refreshToken: newRefreshToken,
+                });
+            }
+        });
+    }
+    
+});
+
+const generateAccessToken = (user) => {
+    return jwt.sign(
+        {id: user.id, isAdmin: user.isAdmin},
+         "mySecretKey",
+         {'expiresIn': '1hr'}
+         );
+}
+
+
+const generateRefreshToken = (user) => {
+    return jwt.sign(
+        {id: user.id, isAdmin: user.isAdmin},
+         "myRefreshSecretKey",
+         {'expiresIn': '1hr'}
+         );
+}
+
+
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -27,11 +77,15 @@ app.post('/api/login', (req, res) => {
     });
     if(user){
         //Generate an access token
-        const accessToken = jwt.sign({id: user.id, isAdmin: user.isAdmin}, "mySecretKey");
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        refreshTokens.push(refreshToken);
+
         res.json({
             username: user.username,
             isAdmin: user.isAdmin,
-            accessToken
+            accessToken,
+            refreshToken
         });
     }
     else{
