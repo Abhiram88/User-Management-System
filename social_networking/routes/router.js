@@ -12,9 +12,8 @@ route.post('/post', services.postRoute);
 route.post('/password_reset', services.forgotPassword);
 route.get('/password_reset_page/:email', services.passwordReset);
 route.get('/api/user/:id',controller.findUser)
+route.get('/connectionDetails', controller.getConnectionDetails);
+route.get('/getusers', controller.getUsers);
 
-// route.use((req, res) => {
-//     res.status(404).send("Page not found...")
-// });
 
-module.exports = route;
+module.exports =  route;
