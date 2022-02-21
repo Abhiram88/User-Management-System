@@ -7,8 +7,39 @@ const { Module } = require('module');
 const nodemailer = require('nodemailer');
 const { info } = require('console');
 dotenv.config({path: 'config.env'});
+var con = require('../sqlConnection');
+var mysql = require('mysql2');
+
+
 
 secretKey = String(process.env.secretKey);
+
+exports.loginRoute = (req, res) => {
+    var email = req.body.email;
+    const password = req.body.password;
+
+    var checkUser = "select * from users where email = ?"
+    const user = con.query(checkUser, email, function(err, result){
+        if(err) throw err;
+        console.log("user exists");
+    });
+    
+    if(!user){
+        console.log(`${email} doesn't exists`);
+    }
+    
+    if(password && user.options.password){
+        res.render('userDashboard');
+    }
+
+}
+
+
+
+
+
+
+
 
 const verifyToken = (req, res, next) => {
     console.log("hello")
@@ -34,7 +65,13 @@ const verifyToken = (req, res, next) => {
 };
 
 exports.homeRoute = (req, res) => {
-    res.send("Home Page");
+    console.log("signin")
+    res.render('loginPage');
+};
+
+exports.signInRoute = (req, res) => {
+    console.log("signin")
+    res.render('loginPage');
 };
 
 function postArticle(){
@@ -63,22 +100,23 @@ exports.postRoute = (req, res) => {
 
 
 
-exports.loginRoute = (req, res) => {
-    const {email, password} = req.body;
+// MongoDB login
+// exports.loginRoute = (req, res) => {
+//     const {email, password} = req.body;
 
-    userDB.findOne({'email': email}, async (err, data) =>{
+//     userDB.findOne({'email': email}, async (err, data) =>{
     
-        if(data && await bcrypt.compare(password, data.password)){
-            jwt.sign({'email': data.email}, secretKey, (err, token) =>{
-                console.log(token);
-                res.json(`${data.email} is logged in`);
-            });
-        }
-        else{
-            res.send("issue with authentication");
-        }
-    });    
-};
+//         if(data && await bcrypt.compare(password, data.password)){
+//             jwt.sign({'email': data.email}, secretKey, (err, token) =>{
+//                 console.log(token);
+//                 res.json(`${data.email} is logged in`);
+//             });
+//         }
+//         else{
+//             res.send("issue with authentication");
+//         }
+//     });    
+// };
 
 
 exports.signupRoute = async (req, res) => {

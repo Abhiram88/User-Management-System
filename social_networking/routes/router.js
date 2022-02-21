@@ -5,6 +5,7 @@ const controller = require('./controller');
 
 
 route.get('/', services.homeRoute);
+route.get('/signin', services.signInRoute);
 route.post('/login', services.loginRoute);
 route.post('/signup', services.signupRoute);
 route.get('/allusers', services.getUsers);

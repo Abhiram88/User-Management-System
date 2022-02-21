@@ -10,21 +10,30 @@ var mysql = require('mysql2');
 
 //connectDB();
 
+
+app.use(bodyparser.urlencoded({extended: true}));
+app.use(express.json());
+app.use('/', require('./routes/router'));
+app.use('/css', express.static(path.resolve(__dirname, "assets/css")))
+
 dotenv.config({path: 'config.env'});
 const PORT = process.env.PORT || 4000
 
-app.use(bodyparser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(express.json());
-app.use('/', require('./routes/router'));
 
-var con = mysql.createConnection({
-    //connectionLimit: 10,
-    host: "127.0.0.1",
-    user: "root",
-    database: 'socialnetworking',
-    password: "admin"
-  });
+app.listen(PORT, ()=>{
+    console.log(`listening on http://localhost:${PORT}`);
+});
+
+
+
+// var con = mysql.createConnection({
+//     //connectionLimit: 10,
+//     host: "127.0.0.1",
+//     user: "root",
+//     database: 'socialnetworking',
+//     password: "admin"
+//   });
 
 //   pool.getConnection((err, connection) => {
 //     if (err) {
@@ -42,9 +51,6 @@ var con = mysql.createConnection({
 //     return
 // })
 
-app.listen(PORT, ()=>{
-    console.log(`listening on http://localhost:${PORT}`);
-});
 
 
-module.exports = con;
+//module.exports = con;
