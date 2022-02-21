@@ -9,8 +9,11 @@ const { info } = require('console');
 dotenv.config({path: 'config.env'});
 var con = require('../sqlConnection');
 var mysql = require('mysql2');
+var datetime = require('node-datetime');
+var moment = require('moment-timezone');
 
 
+moment.tz.setDefault("Asia/Kolkata");
 
 secretKey = String(process.env.secretKey);
 
@@ -35,8 +38,39 @@ exports.loginRoute = (req, res) => {
 }
 
 
+exports.signupRoute = (req, res) => {
+    res.render('signup')
+}
 
 
+exports.newUser = (req, res) => {
+    const {fullName, email, password} = req.body;
+    
+    // var currentYear = new Date().getFullYear();
+    // var current_time = moment().format("HH:mm")
+
+    var dateTime = require('node-datetime');
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M');
+    //console.log(formatted);
+
+    var checkUser = "select * from users where email = ?";
+    const user = con.query(checkUser, email, function(err, result){
+        if(err) throw err;
+        if(!checkUser){
+            console.log("Email is available");
+        }
+    });
+    
+    var createUser = 'insert into users(full_name, email, password, created_on) values (?,?,?,?)';
+    var result = con.query(createUser, [fullName, email, password, formatted], function(err, result){
+        if(err) throw err;
+    });
+   
+    console.log("User created");
+    res.redirect('/signin')
+
+}
 
 
 
@@ -65,12 +99,10 @@ const verifyToken = (req, res, next) => {
 };
 
 exports.homeRoute = (req, res) => {
-    console.log("signin")
     res.render('loginPage');
 };
 
 exports.signInRoute = (req, res) => {
-    console.log("signin")
     res.render('loginPage');
 };
 
@@ -119,27 +151,27 @@ exports.postRoute = (req, res) => {
 // };
 
 
-exports.signupRoute = async (req, res) => {
-    const {name, email, password} = req.body;
-    const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+// exports.signupRoute = async (req, res) => {
+//     const {name, email, password} = req.body;
+//     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const user = new userDB({
-        name: req.body.name,
-        password: encryptedPassword,
-        email: req.body.email
-    });
+//     const user = new userDB({
+//         name: req.body.name,
+//         password: encryptedPassword,
+//         email: req.body.email
+//     });
 
-    if(user){
-        user.save((err, data) => {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.redirect('/allusers');
-            }
-        });
-    }
-};
+//     if(user){
+//         user.save((err, data) => {
+//             if(err){
+//                 console.log(err);
+//             }
+//             else{
+//                 res.redirect('/allusers');
+//             }
+//         });
+//     }
+// };
 
 
 exports.forgotPassword = async (req, res) =>{
