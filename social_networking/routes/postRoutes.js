@@ -4,14 +4,7 @@ const services = require('./renderRoutes');
 const controller = require('./controller');
 
 
-route.get('/', services.homeRoute);
-route.get('/signin', services.signInRoute);
-route.post('/login', services.loginRoute);
-route.get('/signup', services.signupRoute);
-route.post('/newuser', services.newUser);
-route.get('/allusers', services.getUsers);
-
-route.post('/post', services.postRoute);
+route.post('/createpost', services.postRoute);
 route.post('/password_reset', services.forgotPassword);
 route.get('/password_reset_page/:email', services.passwordReset);
 route.get('/api/user/:id',controller.findUser)

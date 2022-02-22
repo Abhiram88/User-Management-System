@@ -18,3 +18,22 @@ h3 {
   padding: 80px 100px 100px 100px;
   margin: 150px 10px 50px 500px;
 }
+
+.entertainment {
+  border: 1px;
+  border-style: dotted;
+}
+
+.userwall {
+  border: 1px;
+  border-style: dotted;
+}
+
+.userfriends {
+  border: 1px;
+  border-style: dotted;
+}
+
+.postbutton {
+  margin: 6px 90%;
+}

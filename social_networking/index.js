@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const bodyparser = require('body-parser');
 const path = require('path');
 const connectDB = require('./model/database')
-const route = require('./routes/router');
+const route = require('./routes/userRoutes');
 var mysql = require('mysql2');
 
 //connectDB();
@@ -13,7 +13,8 @@ var mysql = require('mysql2');
 
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(express.json());
-app.use('/', require('./routes/router'));
+app.use('/', require('./routes/userRoutes'));
+app.use('/', require('./routes/postRoutes'));
 app.use('/css', express.static(path.resolve(__dirname, "assets/css")))
 
 dotenv.config({path: 'config.env'});

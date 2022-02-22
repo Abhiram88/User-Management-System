@@ -11,6 +11,7 @@ var con = require('../sqlConnection');
 var mysql = require('mysql2');
 var datetime = require('node-datetime');
 var moment = require('moment-timezone');
+const { query } = require('../sqlConnection');
 
 
 moment.tz.setDefault("Asia/Kolkata");
@@ -22,19 +23,18 @@ exports.loginRoute = (req, res) => {
     const password = req.body.password;
 
     var checkUser = "select * from users where email = ?"
-    const user = con.query(checkUser, email, function(err, result){
+    con.query(checkUser, email, function(err, result){
         if(err) throw err;
-        console.log("user exists");
-    });
     
-    if(!user){
-        console.log(`${email} doesn't exists`);
+    if(password === result[0].password){
+        res.render('wall', {user_email: email});
     }
-    
-    if(password && user.options.password){
-        res.render('userDashboard');
+    else{
+        res.send("authentication failed");
     }
 
+    });
+    
 }
 
 
@@ -57,9 +57,6 @@ exports.newUser = (req, res) => {
     var checkUser = "select * from users where email = ?";
     const user = con.query(checkUser, email, function(err, result){
         if(err) throw err;
-        if(!checkUser){
-            console.log("Email is available");
-        }
     });
     
     var createUser = 'insert into users(full_name, email, password, created_on) values (?,?,?,?)';
@@ -71,6 +68,48 @@ exports.newUser = (req, res) => {
     res.redirect('/signin')
 
 }
+
+exports.userWall = (req, res) =>{
+    res.render('wall')
+}
+
+
+exports.postRoute = async(req, res) =>{
+    var email = String(req.body.id);
+    const getId = 'select userid from users where email =  ?';
+
+    var dateTime = require('node-datetime');
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M');
+
+    con.query(getId, email, function(err, result){
+        if(err) throw err
+        var userid = result[0].userid
+        var post = req.body.post
+        //console.log(post)
+        var insertPost = 'insert into posts(userid, post, created_on) values (?,?,?)';
+
+        con.query(insertPost, [userid, post, formatted], function(err, result){
+            if(err) throw err;
+        console.log("post inserted");
+        });
+    });    
+
+    res.render('wall', {user_email: email});
+    
+}
+
+
+exports.getUsers = (req, res) =>{
+    let query = 'select * from users';
+    con.query(query, function(err, result){
+        if(err) throw err;
+        res.send(result)
+    });
+    
+}
+
+
 
 
 
@@ -110,24 +149,24 @@ function postArticle(){
     return "user posted";
 }
 
-exports.postRoute = (req, res) => { 
-    const authHeader = req.headers.authorization;
-    if(authHeader){
-        const bearerToken = authHeader.split(' ')[1];
+// exports.postRoute = (req, res) => { 
+//     const authHeader = req.headers.authorization;
+//     if(authHeader){
+//         const bearerToken = authHeader.split(' ')[1];
 
-        jwt.verify(bearerToken, secretKey, async (err, data) => {
-            if(err){
-                res.send("Token is not valid");
-            }
-            else{
-                await res.send(postArticle()); 
-            }
-        });
-    }
-    else{
-        res.status(401).send("Unauthorized");
-    }
-};
+//         jwt.verify(bearerToken, secretKey, async (err, data) => {
+//             if(err){
+//                 res.send("Token is not valid");
+//             }
+//             else{
+//                 await res.send(postArticle()); 
+//             }
+//         });
+//     }
+//     else{
+//         res.status(401).send("Unauthorized");
+//     }
+// };
 
 
 
@@ -245,15 +284,15 @@ exports.passwordReset = (req, res) =>{
 
 };
 
-exports.getUsers = (req, res) => {
-    console.log(process.env.secretKey)
-    userDB.find((err, data)=>{
-        if(err){
-            console.log(err);
-        }
-        else{
-            res.send(data);
-        }
-    }).sort({name: '-1'});
-};
+// exports.getUsers = (req, res) => {
+//     console.log(process.env.secretKey)
+//     userDB.find((err, data)=>{
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             res.send(data);
+//         }
+//     }).sort({name: '-1'});
+// };
 
