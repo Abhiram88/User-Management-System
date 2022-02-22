@@ -27,7 +27,13 @@ exports.loginRoute = (req, res) => {
         if(err) throw err;
     
     if(password === result[0].password){
-        res.render('wall', {user_email: email});
+        var user_id = result[0].userid;
+
+        var getPosts = 'select postid, post from posts where userid = ?';
+        con.query(getPosts, result[0].userid, function(err, result){
+            console.log(result)
+            res.render('wall', {userid: user_id, post_data: result});
+        });
     }
     else{
         res.send("authentication failed");
@@ -76,26 +82,23 @@ exports.userWall = (req, res) =>{
 
 exports.postRoute = async(req, res) =>{
     var email = String(req.body.id);
-    const getId = 'select userid from users where email =  ?';
+    const user_id = req.body.id;
 
     var dateTime = require('node-datetime');
     var dt = dateTime.create();
     var formatted = dt.format('Y-m-d H:M');
 
-    con.query(getId, email, function(err, result){
-        if(err) throw err
-        var userid = result[0].userid
-        var post = req.body.post
+    var post = req.body.post
         //console.log(post)
         var insertPost = 'insert into posts(userid, post, created_on) values (?,?,?)';
 
-        con.query(insertPost, [userid, post, formatted], function(err, result){
+        con.query(insertPost, [user_id, post, formatted], function(err, result){
             if(err) throw err;
         console.log("post inserted");
         });
-    });    
+   
 
-    res.render('wall', {user_email: email});
+    res.render('wall', {userid: user_id});
     
 }
 

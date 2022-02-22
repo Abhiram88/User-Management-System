@@ -14,7 +14,6 @@ var mysql = require('mysql2');
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/', require('./routes/userRoutes'));
-app.use('/', require('./routes/postRoutes'));
 app.use('/css', express.static(path.resolve(__dirname, "assets/css")))
 
 dotenv.config({path: 'config.env'});

@@ -3,6 +3,26 @@ var con = require('../sqlConnection');
 var mysql = require('mysql2');
 
 
+exports.editPost = (req, res) => {
+    var postid = req.query.id;
+    const userid = req.query.userid;
+    res.render('update_post', {postid: postid, userid: userid});
+};
+
+
+exports.updatePost = (req, res) =>{
+    const id = req.body.id;
+    const post = req.body.post;
+    const userid = req.body.userid;
+    
+    let updatePost = 'UPDATE posts SET post = ? WHERE postid = ?';
+    con.query(updatePost, [post, id], function(err, result){
+        if(err) throw err;
+        console.log("post updated");
+    });
+
+    res.render('wall', {userid: userid});
+}
 
 exports.getConnectionDetails = (req, res) => {
     console.log("connection details")
