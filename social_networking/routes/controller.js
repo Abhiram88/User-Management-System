@@ -4,8 +4,10 @@ var mysql = require('mysql2');
 
 
 exports.editPost = (req, res) => {
-    var postid = req.query.id;
+    var postid = req.query.postid;
     const userid = req.query.userid;
+
+    console.log(req.query)
     res.render('update_post', {postid: postid, userid: userid});
 };
 

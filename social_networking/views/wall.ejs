@@ -43,7 +43,7 @@
 
             <div class="container-fluid posts_data" id="post_blog">
                 <h4><i>posts</i></h4>
-                <ul id="posts"></ul><br>
+                <ul id="posts"></ul>
             </div>
     </div>
 
@@ -54,16 +54,16 @@ async function getPosts(userid){
     console.log("hellop")
     var id = userid;
 
-    console.log(id);
-
     fetch(`http://localhost:4000/getposts?userid=${id}`)
     .then(res => res.json())
     .then(data => {
         var postTag = document.querySelector('#posts');
-    
+
         for(var i=0; i<data.length; i++){
+            var edit_post = `<a href='/edit_post?userid=${id}&&postid=${data[i]['postid']}', class='btn border-shadow update'> <span class='text-gradient'><i class='fas fa-pencil-alt'></i></span> </a>`
+
             var pTag = document.createElement("p");
-            pTag.innerHTML = data[i]['post'];
+            pTag.innerHTML = data[i]['post'] + edit_post;
             postTag.appendChild(pTag);
         }
     })
