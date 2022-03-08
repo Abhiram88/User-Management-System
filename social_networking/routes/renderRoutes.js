@@ -12,11 +12,31 @@ var mysql = require('mysql2');
 var datetime = require('node-datetime');
 var moment = require('moment-timezone');
 const { query } = require('../sqlConnection');
+const { post } = require('./userRoutes');
 
 
 moment.tz.setDefault("Asia/Kolkata");
 
 secretKey = String(process.env.secretKey);
+
+function getPosts(userid){
+    let output;
+    var result = [];
+    const setOutput = (rows) => {
+        output = rows;
+        console.log(output);
+    }
+
+    var getPosts = 'select postid, post from posts where userid = ?';
+    con.query(getPosts, userid, (err, rows) => {
+        if(err) throw err; 
+        setOutput(rows);
+    });
+    
+    console.log("jjj")
+    console.log(result)
+    
+}
 
 exports.loginRoute = (req, res) => {
     var email = req.body.email;
@@ -31,7 +51,7 @@ exports.loginRoute = (req, res) => {
 
         var getPosts = 'select postid, post from posts where userid = ?';
         con.query(getPosts, result[0].userid, function(err, result){
-            console.log(result)
+           // console.log(result)
             res.render('wall', {userid: user_id, post_data: result});
         });
     }
@@ -76,9 +96,21 @@ exports.newUser = (req, res) => {
 }
 
 exports.userWall = (req, res) =>{
-    res.render('wall')
+    getPosts()
 }
 
+exports.getPosts = (req, res) =>{
+    console.log(req.query['userid']);
+
+    const userid = req.query['userid'];
+    var getPosts = 'select postid, post from posts where userid = ?';
+    
+    con.query(getPosts, userid, function(err, result){
+        if(err) throw err;
+        res.send(result)
+    });
+    
+}
 
 exports.postRoute = async(req, res) =>{
     var email = String(req.body.id);
@@ -97,8 +129,10 @@ exports.postRoute = async(req, res) =>{
         console.log("post inserted");
         });
    
-
-    res.render('wall', {userid: user_id});
+    var post_data = getPosts(user_id);
+    console.log("ho")
+    console.log(post_data);
+    res.render('wall', {userid: user_id, post_data: post_data});
     
 }
 

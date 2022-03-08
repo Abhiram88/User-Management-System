@@ -7,8 +7,13 @@ const path = require('path');
 const connectDB = require('./model/database')
 const route = require('./routes/userRoutes');
 var mysql = require('mysql2');
+var cors = require('cors')
 
 //connectDB();
+
+app.use(cors({
+    origin: 'http://localhost:4000'
+}));
 
 
 app.use(bodyparser.urlencoded({extended: true}));

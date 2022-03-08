@@ -12,7 +12,7 @@
 
 </head>
 
-<body>
+<body onload="getPosts('<%= userid %>')">
 
     <div class="container-fluid">
         <div class="row">
@@ -40,19 +40,40 @@
             <br><br>
 
             
-            <div class="row">
-                <% for(i=1; i < post_data.length; i++) {%>
-                    <p><%= post_data[i].post %> 
-                        <a href="/edit_post?<%= userid %>&&id=<%= post_data[i].postid %>", class='btn border-shadow update'>
-                            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
-                        </a>
-                    </p>
-                    
-                <% } %>
+
+            <div class="container-fluid posts_data" id="post_blog">
+                <h4><i>posts</i></h4>
+                <ul id="posts"></ul><br>
             </div>
     </div>
 
    
+<script>
+
+async function getPosts(userid){
+    console.log("hellop")
+    var id = userid;
+
+    console.log(id);
+
+    fetch(`http://localhost:4000/getposts?userid=${id}`)
+    .then(res => res.json())
+    .then(data => {
+        var postTag = document.querySelector('#posts');
+    
+        for(var i=0; i<data.length; i++){
+            var pTag = document.createElement("p");
+            pTag.innerHTML = data[i]['post'];
+            postTag.appendChild(pTag);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
+
+  
+</script>
 
 </body>
 </html>

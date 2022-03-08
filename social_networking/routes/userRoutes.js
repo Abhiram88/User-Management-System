@@ -12,6 +12,7 @@ route.post('/newuser', services.newUser);
 route.get('/allusers', services.getUsers);
 route.get('/userwall', services.userWall);
 route.get('/edit_post',controller.editPost);
+route.get('/getposts',services.getPosts);
 route.post('/update_post',controller.updatePost);
 
 route.post('/createpost', services.postRoute);
