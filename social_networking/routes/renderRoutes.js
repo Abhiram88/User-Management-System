@@ -96,7 +96,7 @@ exports.newUser = (req, res) => {
 }
 
 exports.userWall = (req, res) =>{
-    getPosts()
+    res.render('wall')
 }
 
 exports.getPosts = (req, res) =>{
