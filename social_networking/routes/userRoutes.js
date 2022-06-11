@@ -15,6 +15,8 @@ route.get('/edit_post',controller.editPost);
 route.get('/getposts',services.getPosts);
 route.post('/update_post',controller.updatePost);
 
+route.post('/verify_user',services.verifyUser);
+
 route.post('/createpost', services.postRoute);
 route.post('/password_reset', services.forgotPassword);
 route.get('/password_reset_page/:email', services.passwordReset);

@@ -38,6 +38,28 @@ function getPosts(userid){
     
 }
 
+// temporary setup for verifying user credentials.. need to add bycrypt
+exports.verifyUser = (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password
+
+    console.log("verify", req.query)
+    
+    var checkUser = "select * from users where email=?"
+    con.query(checkUser, email, function(err, result){
+        if(err) return "error";
+
+        if(password === result[0].password){
+            console.log("verified user");
+            res.json([result[0].email, result[0].full_name, "verified"]);
+        }
+        else{
+            res.json("False")
+        }
+    })
+
+}
+
 exports.loginRoute = (req, res) => {
     var email = req.body.email;
     const password = req.body.password;

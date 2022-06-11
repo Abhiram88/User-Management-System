@@ -12,8 +12,8 @@ var cors = require('cors')
 //connectDB();
 
 app.use(cors({
-    origin: 'http://localhost:4000', 
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:4000',
+    origin: 'http://localhost:3000',
 }));
 
 

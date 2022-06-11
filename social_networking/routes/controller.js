@@ -8,22 +8,26 @@ exports.editPost = (req, res) => {
     const userid = req.query.userid;
 
     console.log(req.query)
+    console.log(hello)
     res.render('update_post', {postid: postid, userid: userid});
 };
 
 
 exports.updatePost = (req, res) =>{
-    const id = req.body.id;
+    const id = Number(req.body.postid);
     const post = req.body.post;
-    const userid = req.body.userid;
+    const userid = Number(req.body.userid);
     
-    let updatePost = 'UPDATE posts SET post = ? WHERE postid = ?';
-    con.query(updatePost, [post, id], function(err, result){
-        if(err) throw err;
-        console.log("post updated");
-    });
+    
+    console.log(post, userid);
+        let updatePost = 'UPDATE posts SET post = ? WHERE postid = ?';
+        con.query(updatePost, [post, id], function(err, result){
+            if(err) throw err;
+            console.log("post updated");
+        });
 
-    res.render('wall', {userid: userid});
+    //res.render('wall', {userid: userid});
+    return "post updated";
 }
 
 exports.getConnectionDetails = (req, res) => {
