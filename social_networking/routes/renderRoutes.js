@@ -51,7 +51,8 @@ exports.verifyUser = (req, res) => {
 
         if(password === result[0].password){
             console.log("verified user");
-            res.json([result[0].email, result[0].full_name, "verified"]);
+            var token = 'test123';
+            res.json([result[0].email, result[0].full_name, "verified", token]);
         }
         else{
             res.json("False")
@@ -132,6 +133,11 @@ exports.getPosts = (req, res) =>{
         res.send(result)
     });
     
+}
+
+
+exports.getUserPosts = (req,res) => {
+    res.send(req.params);
 }
 
 exports.postRoute = async(req, res) =>{
