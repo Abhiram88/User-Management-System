@@ -65,22 +65,19 @@ exports.loginRoute = (req, res) => {
     var email = req.body.email;
     const password = req.body.password;
 
-    var checkUser = "select * from users where email = ?"
+    var checkUser = "select userid from users where email = ?"
     con.query(checkUser, email, function(err, result){
         if(err) throw err;
     
-    if(password === result[0].password){
-        var user_id = result[0].userid;
+    
+    var user_id = result[0].userid;
 
-        var getPosts = 'select postid, post from posts where userid = ?';
-        con.query(getPosts, result[0].userid, function(err, result){
-           // console.log(result)
-            res.render('wall', {userid: user_id, post_data: result});
-        });
-    }
-    else{
-        res.send("authentication failed");
-    }
+    var getPosts = 'select postid, post from posts where userid = ?';
+    con.query(getPosts, result[0].userid, function(err, result){
+        // console.log(result)
+        res.json([user_id, result]);
+    });
+
 
     });
     
@@ -123,15 +120,21 @@ exports.userWall = (req, res) =>{
 }
 
 exports.getPosts = (req, res) =>{
-    console.log(req.query['userid']);
-
-    const userid = req.query['userid'];
-    var getPosts = 'select postid, post from posts where userid = ?';
+   var email = req.query.email;
     
-    con.query(getPosts, userid, function(err, result){
+    var checkUser = "select userid from users where email = ?"
+    con.query(checkUser, email, function(err, result){
         if(err) throw err;
-        res.send(result)
+
+    var user_id = result[0].userid;
+
+    var getPosts = 'select postid, post from posts where userid = ?';
+    con.query(getPosts, result[0].userid, function(err, result){
+        // console.log(result)
+        res.json([user_id, result]);
     });
+
+});
     
 }
 
