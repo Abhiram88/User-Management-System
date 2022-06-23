@@ -18,6 +18,7 @@ route.post('/update_post',controller.updatePost);
 
 route.post('/verify_user',services.verifyUser);
 
+route.get('/searchUserFunctionality/:search', services.searchUsers);
 route.post('/friendRequest/:fromUser/:toUser', services.friendRequest);
 route.get('/getFriendRequests/:email', services.checkFriendRequests)
 route.post('/createpost', services.postRoute);

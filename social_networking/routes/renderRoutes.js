@@ -211,7 +211,8 @@ exports.friendRequest = (req, res) => {
 
 exports.checkFriendRequests =(req, res) => {
     const email = req.params.email;
-    var requestedUsers = []
+    var requestedUsers = [];
+
     var query = "select requestor from friends where requested = ?";
     con.query(query, email, function(err, result){
         if(err) return err;
@@ -237,6 +238,24 @@ exports.checkFriendRequests =(req, res) => {
     // }
 }
 
+exports.searchUsers = (req, res) => {
+    var searchParameter = req.params.search;
+    searchParameter = String(searchParameter);
+
+    var query = 'select email from users where full_name LIKE ?';
+    con.query(query, "%"+searchParameter+"%", function(err, result){
+        if(err) return err;
+        if(result){
+            console.log(result)
+            res.json(result);
+        }
+        else{
+            res.json(`no record of ${searchParameter} in our database`);
+        }
+        
+    });
+
+}
 
 
 const verifyToken = (req, res, next) => {
