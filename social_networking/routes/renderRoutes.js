@@ -178,6 +178,38 @@ exports.getUsers = (req, res) =>{
 }
 
 
+exports.friendRequest = (req, res) => {
+    console.log(req.params);
+    var requestor = req.params.fromUser;
+    var requested = req.params.toUser;
+
+    let query = "insert into friends(requestor, requested) values(?, ?)";
+    let selectQueryRequestor = 'select requestor from friends where requestor=?';
+    let selectQueryRequested = 'select requested from friends where requested=?';
+
+    var requestorInfo = con.query(selectQueryRequestor, requestor, function(err, result){
+        if(err) return err;
+        return result;
+    });
+
+    var requestedInfo = con.query(selectQueryRequested, requested, function(err, result){
+        if(err) return err;
+        return result;
+    });
+
+    //console.log(requestedInfo.values)
+    if (requestorInfo === requestor && requestedInfo.values === requested){
+        console.log("Friends");
+    }
+    else{
+        con.query(query, [requestor, requested],function(err, result){
+        if(err) throw err;
+        console.log("friend requested");
+    });
+    }
+
+    
+}
 
 
 
