@@ -19,7 +19,7 @@ route.post('/update_post',controller.updatePost);
 route.post('/verify_user',services.verifyUser);
 
 route.post('/friendRequest/:fromUser/:toUser', services.friendRequest);
-
+route.get('/getFriendRequests/:email', services.checkFriendRequests)
 route.post('/createpost', services.postRoute);
 route.post('/password_reset', services.forgotPassword);
 route.get('/password_reset_page/:email', services.passwordReset);

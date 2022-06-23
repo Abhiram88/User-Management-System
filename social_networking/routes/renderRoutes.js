@@ -205,12 +205,37 @@ exports.friendRequest = (req, res) => {
         con.query(query, [requestor, requested],function(err, result){
         if(err) throw err;
         console.log("friend requested");
-    });
-    }
-
-    
+     });
+    }    
 }
 
+exports.checkFriendRequests =(req, res) => {
+    const email = req.params.email;
+    var requestedUsers = []
+    var query = "select requestor from friends where requested = ?";
+    con.query(query, email, function(err, result){
+        if(err) return err;
+        for (var i=0; i<result.length; i++){
+            requestedUsers.push(result[i]);
+            //console.log(result[i])
+        }
+        if(requestedUsers){
+            return res.json([requestedUsers, requestedUsers.length]);
+        }
+        else{
+            return res.json([0]);
+        }
+    });
+    
+    // if(friedRequests._queryOptions.values){
+    //     console.log("here")
+    //     return res.json([friedRequests._queryOptions.values, [friedRequests._queryOptions.values].length]);
+    // }
+    // else{
+    //     console.log("else")
+    //     return res.json([0]);
+    // }
+}
 
 
 
