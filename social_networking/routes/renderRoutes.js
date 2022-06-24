@@ -13,6 +13,8 @@ var datetime = require('node-datetime');
 var moment = require('moment-timezone');
 const { query } = require('../sqlConnection');
 const { post } = require('./userRoutes');
+var moment = require('moment');
+const {format} = require('date-fns');
 
 
 moment.tz.setDefault("Asia/Kolkata");
@@ -128,9 +130,15 @@ exports.getPosts = (req, res) =>{
 
     var user_id = result[0].userid;
 
-    var getPosts = 'select postid, post from posts where userid = ?';
+    var getPosts = 'select postid, post, created_on from posts where userid = ?';
     con.query(getPosts, result[0].userid, function(err, result){
-        // console.log(result)
+        
+        console.log(result.length)
+        console.log(result)
+        for (var i=0; i<result.length; i++){
+            result[i].created_on = format(result[i].created_on, 'MMM do H:m');
+        }
+        
         res.json([user_id, result]);
     });
 
@@ -142,6 +150,26 @@ exports.getPosts = (req, res) =>{
 exports.getUserPosts = (req,res) => {
     res.send(req.params);
 }
+
+exports.submitPost = (req, res) => {
+    var post = String(req.params.post);
+    const user_id = req.params.id;
+
+    console.log(post, user_id)
+    
+    var dateTime = require('node-datetime');
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M');
+
+    
+        //console.log(post)
+    var insertPost = 'insert into posts(userid, post, created_on) values (?,?,?)';
+
+    con.query(insertPost, [user_id, post, formatted], function(err, result){
+        if(err) throw err;
+        return "post inserted"
+    });
+} 
 
 exports.postRoute = async(req, res) =>{
     var email = String(req.body.id);
