@@ -42,6 +42,7 @@
     "mongoose": "^6.1.4",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
+    "newsapi": "^2.4.1",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15"

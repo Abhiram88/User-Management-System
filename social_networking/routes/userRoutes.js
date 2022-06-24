@@ -29,6 +29,7 @@ route.get('/connectionDetails', controller.getConnectionDetails);
 route.get('/getusers', controller.getUsers);
 
 route.post('/sharePost/:id/:post',services.submitPost);
+route.get('/getNewsHeadlines',services.newsToday);
 
 
 

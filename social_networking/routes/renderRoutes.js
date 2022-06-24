@@ -15,9 +15,12 @@ const { query } = require('../sqlConnection');
 const { post } = require('./userRoutes');
 var moment = require('moment');
 const {format} = require('date-fns');
-
+const axios = require('axios');
+const { response } = require('express');
 
 moment.tz.setDefault("Asia/Kolkata");
+
+const API_KEY = "d115711b158b470384571610e61677f0";
 
 secretKey = String(process.env.secretKey);
 
@@ -140,9 +143,8 @@ exports.getPosts = (req, res) =>{
             else{
                 result[i].created_on = format(result[i].created_on, `MMM do h:m'`) + " PM";
             }
-        }
-        
-            res.json([user_id, result]);
+        }        
+          res.json([user_id, result]);
         });
 
 });
@@ -288,6 +290,42 @@ exports.searchUsers = (req, res) => {
 
 }
 
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI(API_KEY);
+
+exports.newsToday = (req, res) => {
+    var news = new Map();
+    var titles = [];
+    var urls = [];
+
+    var newsToday = {};
+    
+    newsapi.v2.topHeadlines({
+        sources: 'bbc-news,the-verge',
+        language: 'en',
+    }).then(response => {
+        for (var i=0; i<response.articles.length; i++){
+            //console.log(response.articles[i].title);
+            news.set(response.articles[i].title, response.articles[i].url);
+        }
+        //console.log(news.keys())
+
+        for (const x of news.keys()) {
+            titles.push(x);
+        }
+
+        for (const x of news.values()) {
+            urls.push(x);
+        }
+        
+        for (let i = 0; i < titles.length; i++) {
+            newsToday[titles[i]] = urls[i];
+        }
+        res.json(newsToday)
+    });
+    
+    
+}
 
 const verifyToken = (req, res, next) => {
     console.log("hello")
