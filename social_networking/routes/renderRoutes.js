@@ -133,14 +133,17 @@ exports.getPosts = (req, res) =>{
     var getPosts = 'select postid, post, created_on from posts where userid = ?';
     con.query(getPosts, result[0].userid, function(err, result){
         
-        console.log(result.length)
-        console.log(result)
         for (var i=0; i<result.length; i++){
-            result[i].created_on = format(result[i].created_on, 'MMM do H:m');
+            if(format(result[i].created_on, 'H') < 12){
+                result[i].created_on = format(result[i].created_on, `MMM do h:m'`) + " AM";
+            }
+            else{
+                result[i].created_on = format(result[i].created_on, `MMM do h:m'`) + " PM";
+            }
         }
         
-        res.json([user_id, result]);
-    });
+            res.json([user_id, result]);
+        });
 
 });
     
