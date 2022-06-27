@@ -51,19 +51,25 @@ exports.verifyUser = (req, res) => {
     console.log("verify", req.query)
     
     var checkUser = "select * from users where email=?"
-    con.query(checkUser, email, function(err, result){
+    if(email && password){
+         con.query(checkUser, email, function(err, result){
         if(err) return "error";
 
-        if(password === result[0].password){
-            console.log("verified user");
-            var token = 'test123';
-            res.json([result[0].email, result[0].full_name, "verified", token]);
-        }
-        else{
-            res.json("False")
-        }
-    })
+            if(password === result[0].password){
+                console.log("verified user");
+                var token = 'test123';
+                res.json([result[0].email, result[0].full_name, "verified", token]);
+            }
+            else{
+                console.log("Unable to verify user")
+                res.json("Incorrect username/password");
+            }
+        })
 
+    }else{
+        res.json("Both email and password are required");
+    }
+   
 }
 
 exports.loginRoute = (req, res) => {
@@ -160,7 +166,7 @@ exports.submitPost = (req, res) => {
     var post = String(req.params.post);
     const user_id = req.params.id;
 
-    console.log(post, user_id)
+    console.log("hehe",post, user_id)
     
     var dateTime = require('node-datetime');
     var dt = dateTime.create();
