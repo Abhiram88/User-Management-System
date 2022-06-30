@@ -1,4 +1,4 @@
-var userDB = require('../model/database');
+//var userDB = require('../model/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -165,8 +165,6 @@ exports.getUserPosts = (req,res) => {
 exports.submitPost = (req, res) => {
     var post = String(req.params.post);
     const user_id = req.params.id;
-
-    console.log("hehe",post, user_id)
     
     var dateTime = require('node-datetime');
     var dt = dateTime.create();
@@ -266,15 +264,6 @@ exports.checkFriendRequests =(req, res) => {
             return res.json([0]);
         }
     });
-    
-    // if(friedRequests._queryOptions.values){
-    //     console.log("here")
-    //     return res.json([friedRequests._queryOptions.values, [friedRequests._queryOptions.values].length]);
-    // }
-    // else{
-    //     console.log("else")
-    //     return res.json([0]);
-    // }
 }
 
 exports.searchUsers = (req, res) => {
@@ -311,7 +300,7 @@ exports.newsToday = (req, res) => {
         language: 'en',
     }).then(response => {
         for (var i=0; i<response.articles.length; i++){
-            //console.log(response.articles[i].title);
+            console.log(response.articles[i].title);
             news.set(response.articles[i].title, response.articles[i].url);
         }
         //console.log(news.keys())
@@ -334,7 +323,6 @@ exports.newsToday = (req, res) => {
 }
 
 const verifyToken = (req, res, next) => {
-    console.log("hello")
     const authHeader = req.headers.authorization;
     if(authHeader){
         const bearerToken = authHeader.split(' ')[1];
@@ -356,17 +344,24 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-exports.homeRoute = (req, res) => {
-    res.render('loginPage');
-};
+// exports.homeRoute = (req, res) => {
+//     res.render('loginPage');
+// };
 
-exports.signInRoute = (req, res) => {
-    res.render('loginPage');
-};
+// exports.signInRoute = (req, res) => {
+//     res.render('loginPage');
+// };
 
-function postArticle(){
-    return "user posted";
-}
+// function postArticle(){
+//     return "user posted";
+// }
+
+
+/* 
+    *************************
+    IGNORE
+    *************************
+*/
 
 // exports.postRoute = (req, res) => { 
 //     const authHeader = req.headers.authorization;
@@ -390,7 +385,7 @@ function postArticle(){
 
 
 
-// MongoDB login
+
 // exports.loginRoute = (req, res) => {
 //     const {email, password} = req.body;
 
@@ -432,76 +427,76 @@ function postArticle(){
 // };
 
 
-exports.forgotPassword = async (req, res) =>{
+// exports.forgotPassword = async (req, res) =>{
 
-    const email = req.body.email;
-    passwordResetKey = process.env.passwordResetKey;
+//     const email = req.body.email;
+//     passwordResetKey = process.env.passwordResetKey;
     
 
-    const user = userDB.findOne({email: email});
-    const user_id = userDB.findOne({email: email}).then((user_id) => {
-        return user_id.id;
-    });
+//     const user = userDB.findOne({email: email});
+//     const user_id = userDB.findOne({email: email}).then((user_id) => {
+//         return user_id.id;
+//     });
 
-    console.log(user_id);
+//     console.log(user_id);
     
-    const resetToken = jwt.sign({email: email}, passwordResetKey, {
-        expiresIn: '30sec'
-    });
+//     const resetToken = jwt.sign({email: email}, passwordResetKey, {
+//         expiresIn: '30sec'
+//     });
 
-    console.log(resetToken);
+//     console.log(resetToken);
 
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'challapalli.abhiram@gmail.com',
-            pass: process.env.gmailPass
-        }
-    });
+//     var transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'challapalli.abhiram@gmail.com',
+//             pass: process.env.gmailPass
+//         }
+//     });
 
-    if(user){
-        var mailOptions = {
-            from: "challapalli.abhiram@gmail.com",
-            to: email,
-            subject: "Password Reset Request",
-            html: `<a href = http://localhost:4000/password_reset_page/${email}>
-                 ${resetToken} </a>`,
+//     if(user){
+//         var mailOptions = {
+//             from: "challapalli.abhiram@gmail.com",
+//             to: email,
+//             subject: "Password Reset Request",
+//             html: `<a href = http://localhost:4000/password_reset_page/${email}>
+//                  ${resetToken} </a>`,
     
-        };
+//         };
     
-        transporter.sendMail(mailOptions, (err, data) => {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.status(200).send(`email sent to ${email}`);
-            }
-        });
+//         transporter.sendMail(mailOptions, (err, data) => {
+//             if(err){
+//                 console.log(err);
+//             }
+//             else{
+//                 res.status(200).send(`email sent to ${email}`);
+//             }
+//         });
 
-        await userDB.updateOne({email: email}, 
-            {$set:{ 
-                resetToken: resetToken,
-            }}, { upsert: true });
-    }
-    else{
-        res.send("Unable to find user");
-    }
+//         await userDB.updateOne({email: email}, 
+//             {$set:{ 
+//                 resetToken: resetToken,
+//             }}, { upsert: true });
+//     }
+//     else{
+//         res.send("Unable to find user");
+//     }
     
-};
+// };
 
-exports.passwordReset = (req, res) =>{
-    const email = req.params.email;
+// exports.passwordReset = (req, res) =>{
+//     const email = req.params.email;
 
-    userDB.findOne({email: email}, (err, data) =>{
-        if(data){
-         jwt.verify(data.resetToken, process.env.resetToken, async(err, data) =>{
-            console.log("verified");
-         });
-        }
-    });
+//     userDB.findOne({email: email}, (err, data) =>{
+//         if(data){
+//          jwt.verify(data.resetToken, process.env.resetToken, async(err, data) =>{
+//             console.log("verified");
+//          });
+//         }
+//     });
 
 
-};
+// };
 
 // exports.getUsers = (req, res) => {
 //     console.log(process.env.secretKey)
