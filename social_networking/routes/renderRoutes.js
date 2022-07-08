@@ -253,16 +253,24 @@ exports.checkFriendRequests =(req, res) => {
     var query = "select requestor from friends where requested = ?";
     con.query(query, email, function(err, result){
         if(err) return err;
-        for (var i=0; i<result.length; i++){
-            requestedUsers.push(result[i]);
-            //console.log(result[i])
-        }
-        if(requestedUsers){
-            return res.json([requestedUsers, requestedUsers.length]);
+
+        if(result){
+            for (var i=0; i<result.length; i++){
+            
+                requestedUsers.push(result[i].requestor);
+                //console.log(requestedUsers)
+            }
+            if(requestedUsers){
+                return res.json([requestedUsers, requestedUsers.length]);
+            }
+            else{
+                return res.json([0]);
+            }
         }
         else{
             return res.json([0]);
         }
+        
     });
 }
 
@@ -300,7 +308,7 @@ exports.newsToday = (req, res) => {
         language: 'en',
     }).then(response => {
         for (var i=0; i<response.articles.length; i++){
-            console.log(response.articles[i].title);
+            //console.log(response.articles[i].title);
             news.set(response.articles[i].title, response.articles[i].url);
         }
         //console.log(news.keys())
