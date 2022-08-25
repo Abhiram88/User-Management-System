@@ -37,6 +37,7 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
+    "kiteconnect": "^4.0.1",
     "moment-timezone": "^0.5.34",
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.4",
@@ -45,6 +46,7 @@
     "newsapi": "^2.4.1",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.7.2",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "request": "^2.88.2"
   }
 }

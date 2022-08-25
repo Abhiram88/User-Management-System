@@ -2,6 +2,7 @@ const express = require('express');
 const route = express.Router();
 const services = require('./renderRoutes');
 const controller = require('./controller');
+const market = require('./market');
 
 
 //route.get('/', services.homeRoute);
@@ -32,5 +33,8 @@ route.post('/sharePost/:id/:post',services.submitPost);
 route.get('/getNewsHeadlines',services.newsToday);
 
 
+
+// Market routes
+route.get('/getNifty',market.getNiftyData);
 
 module.exports = route;
