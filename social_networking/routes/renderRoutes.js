@@ -249,16 +249,18 @@ exports.friendRequest = (req, res) => {
 exports.checkFriendRequests =(req, res) => {
     const email = req.params.email;
     var requestedUsers = [];
+    var requestedUsersName = [];
 
     var query = "select requestor from friends where requested = ?";
+    var requestorUser = 'select full_name from users where email = ?';
+
     con.query(query, email, function(err, result){
         if(err) return err;
-
+        
         if(result){
             for (var i=0; i<result.length; i++){
-            
                 requestedUsers.push(result[i].requestor);
-                //console.log(requestedUsers)
+                //console.log(result)
             }
             if(requestedUsers){
                 return res.json([requestedUsers, requestedUsers.length]);
@@ -273,6 +275,24 @@ exports.checkFriendRequests =(req, res) => {
         
     });
 }
+
+exports.getRequestedUsers = (req, res) => {
+    const emailPacket = req.params.data;
+    console.log(emailPacket)
+    var requestedUsers = [];
+
+    var query = 'select full_name from users where email IN (?)';
+    console.log(query)
+    
+    con.query(query, emailPacket, function(err, result){
+            if (err) return err;
+            console.log("hello")
+            console.log(result)
+            
+        });
+
+}
+
 
 exports.searchUsers = (req, res) => {
     var searchParameter = req.params.search;
@@ -294,6 +314,7 @@ exports.searchUsers = (req, res) => {
 }
 
 const NewsAPI = require('newsapi');
+const e = require('express');
 const newsapi = new NewsAPI(API_KEY);
 
 exports.newsToday = (req, res) => {

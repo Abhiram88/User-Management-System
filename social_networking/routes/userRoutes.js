@@ -22,6 +22,7 @@ route.post('/verify_user',services.verifyUser);
 route.get('/searchUserFunctionality/:search', services.searchUsers);
 route.post('/friendRequest/:fromUser/:toUser', services.friendRequest);
 route.get('/getFriendRequests/:email', services.checkFriendRequests)
+route.get('/requestedUsers/:data', services.getRequestedUsers)
 //route.post('/createpost', services.postRoute);
 //route.post('/password_reset', services.forgotPassword);
 //route.get('/password_reset_page/:email', services.passwordReset);
